@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-Commerce Website Using Django{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f8; }
+        nav { background: #1f2937; color: white; padding: 12px 24px; display: flex; gap: 12px; }
+        nav a { color: white; text-decoration: none; }
+        .container { max-width: 1000px; margin: 24px auto; background: white; padding: 24px; border-radius: 8px; }
+        .card { border: 1px solid #ddd; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+        .btn { background: #2563eb; color: white; padding: 8px 12px; border: none; border-radius: 6px; text-decoration: none; cursor: pointer; display: inline-block; }
+        .btn-danger { background: #dc2626; }
+        .muted { color: #6b7280; }
+        .messages { list-style: none; padding: 0; }
+        .messages li { padding: 8px; margin-bottom: 8px; border-radius: 6px; background: #eef2ff; }
+        table { width: 100%; border-collapse: collapse; }
+        table th, table td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'product_list' %}">Products</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'cart_view' %}">Cart</a>
+            <a href="{% url 'order_history' %}">Order History</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn">Logout</button>
+            </form>
+            <span class="muted">Hi, {{ user.username }}</span>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
