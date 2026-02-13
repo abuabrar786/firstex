@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}E-Commerce Website Using Django{% endblock %}</title>
+    <style>
+        :root {
+            --brand: #2563eb;
+            --brand-dark: #1e40af;
+            --bg: #f3f6fb;
+            --text: #0f172a;
+            --muted: #64748b;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --success-bg: #ecfdf3;
+            --success-text: #166534;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .topbar {
+            background: linear-gradient(90deg, #0f172a, #1e293b);
+            color: white;
+            padding: 14px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .topbar-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .nav-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        a { color: inherit; text-decoration: none; }
+        .nav-pill {
+            padding: 7px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+        }
+        .main {
+            max-width: 1100px;
+            margin: 24px auto;
+            padding: 0 12px;
+        }
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+        .btn {
+            border: none;
+            border-radius: 10px;
+            background: var(--brand);
+            color: white;
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn:hover { background: var(--brand-dark); }
+        .btn-danger { background: #dc2626; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--brand);
+            color: var(--brand);
+        }
+        .messages { list-style: none; padding: 0; margin: 0 0 14px; }
+        .messages li {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+        }
+        .muted { color: var(--muted); }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th, .table td { padding: 11px 8px; border-bottom: 1px solid var(--border); text-align: left; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-wrap">
+            <a class="brand" href="{% url 'product_list' %}">🛒 E-Commerce Website Using Django</a>
+            <nav class="nav-links">
+                <a class="nav-pill" href="{% url 'product_list' %}">Products</a>
+                {% if user.is_authenticated %}
+                    <a class="nav-pill" href="{% url 'cart_view' %}">Cart</a>
+                    <a class="nav-pill" href="{% url 'order_history' %}">Orders</a>
+                    <span class="nav-pill">Hi, {{ user.username }}</span>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="nav-pill" style="background: transparent; color: white; cursor:pointer;" type="submit">Logout</button>
+                    </form>
+                {% else %}
+                    <a class="nav-pill" href="{% url 'login' %}">Login</a>
+                    <a class="nav-pill" href="{% url 'register' %}">Register</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="panel">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</body>
+</html>

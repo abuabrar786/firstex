@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Order History{% endblock %}
+{% block content %}
+<h2>Order History</h2>
+<p class="muted">Track all your previously placed orders.</p>
+
+{% for order in orders %}
+    <div style="border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+            <strong>Order #{{ order.id }}</strong>
+            <span>Status: {{ order.status }}</span>
+        </div>
+        <p class="muted" style="margin:8px 0;">Placed on {{ order.created_at }}</p>
+        <p><strong>Total: ₹{{ order.total_amount }}</strong></p>
+        <a href="{% url 'order_summary' order.id %}" class="btn">View Invoice</a>
+    </div>
+{% empty %}
+    <p>No orders yet.</p>
+{% endfor %}
+{% endblock %}
